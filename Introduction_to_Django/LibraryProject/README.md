@@ -8,5 +8,5 @@ It contains:
 - CRUD operations documented in Markdown files (`create.md`, `retrieve.md`, `update.md`, `delete.md`).
 - Django admin interface configured for managing books.
 
-Author: Your Name
+Author: Mateiyendou kombat
 Date: 2025-08-31
