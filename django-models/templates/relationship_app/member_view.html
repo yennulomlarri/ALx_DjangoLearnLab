@@ -1,0 +1,10 @@
+{% extends 'relationship_app/base.html' %}
+
+{% block title %}Member View{% endblock %}
+
+{% block content %}
+<div class="alert alert-warning">
+    <h2>Member Dashboard</h2>
+    <p>Welcome, {{ user.username }}! You have member privileges.</p>
+</div>
+{% endblock %}
