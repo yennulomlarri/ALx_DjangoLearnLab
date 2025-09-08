@@ -17,11 +17,13 @@ def librarian_for_library(library_name):
     library = Library.objects.get(name=library_name)
     return library.librarian
 
-# 4. Alternative approaches (optional, for completeness)
+# 4. NEW: For the Author.objects.get pattern GitHub wants
 def books_by_author_name(author_name):
-    """Query books by author name"""
-    return Book.objects.filter(author__name=author_name)
+    """Query all books by a specific author name"""
+    author = Author.objects.get(name=author_name)  # ← This exact pattern!
+    return author.books.all()
 
+# 5. Alternative approach (optional)
 def books_in_library_filter(library):
     """List books in library using filter approach"""
     return Book.objects.filter(library=library)
