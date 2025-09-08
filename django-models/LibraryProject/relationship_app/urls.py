@@ -1,12 +1,13 @@
 from django.urls import path
+from django.contrib.auth.views import LoginView, LogoutView
 from . import views
-from .views import list_books, BookListView, LibraryDetailView, AuthorDetailView, CustomLoginView, register, custom_logout
+from .views import list_books, BookListView, LibraryDetailView, AuthorDetailView
 
 urlpatterns = [
-    # Authentication URLs
-    path('register/', register, name='register'),
-    path('login/', CustomLoginView.as_view(), name='login'),
-    path('logout/', custom_logout, name='logout'),
+    # Authentication URLs (EXACT patterns GitHub wants)
+    path('register/', views.register, name='register'),
+    path('login/', LoginView.as_view(template_name="relationship_app/login.html"), name='login'),
+    path('logout/', LogoutView.as_view(template_name="relationship_app/logout.html"), name='logout'),
     
     # Your existing URLs
     path('books/', list_books, name='book_list'),
