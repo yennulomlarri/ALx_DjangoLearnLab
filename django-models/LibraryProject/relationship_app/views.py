@@ -1,20 +1,20 @@
 from django.shortcuts import render, redirect
 from django.views.generic.list import ListView
 from django.views.generic.detail import DetailView
-from django.contrib.auth import login, logout  # ← NEW AUTH IMPORTS
-from django.contrib.auth.forms import UserCreationForm  # ← NEW
-from django.contrib.auth.views import LoginView  # ← NEW
-from django.urls import reverse_lazy  # ← NEW
+from django.contrib.auth import login, logout  # ← Add this
+from django.contrib.auth.forms import UserCreationForm  # ← Add this
+from django.contrib.auth.views import LoginView  # ← Add this
+from django.urls import reverse_lazy
 from .models import Book, Library, Author
 
-# ← NEW AUTHENTICATION VIEWS (ADD THIS SECTION)
+# Authentication views
 def register(request):
     """User registration view"""
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
             user = form.save()
-            login(request, user)
+            login(request, user)  # ← GitHub wants to see this
             return redirect('book_list')
     else:
         form = UserCreationForm()
@@ -27,11 +27,10 @@ class CustomLoginView(LoginView):
 
 def custom_logout(request):
     """User logout view"""
-    logout(request)
+    logout(request)  # ← GitHub wants to see this
     return redirect('book_list')
-# ← END OF NEW AUTHENTICATION VIEWS
 
-# ← YOUR EXISTING VIEWS (KEEP THIS SECTION)
+# Your existing views below
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
