@@ -15,9 +15,9 @@ urlpatterns = [
     path('admin/', admin_view, name='admin_view'),
     
     # ← NEW PERMISSION-BASED URLs (ADDED THIS SECTION)
-    path('books/add/', add_book, name='add_book'),
-    path('books/<int:book_id>/edit/', edit_book, name='edit_book'),
-    path('books/<int:book_id>/delete/', delete_book, name='delete_book'),
+    path('add_book/', add_book, name='add_book'),  # ← CHANGE to exact pattern
+    path('edit_book/<int:book_id>/', edit_book, name='edit_book'),  # ← CHANGE to exact pattern
+    path('delete_book/<int:book_id>/', delete_book, name='delete_book'),  # ← Keep this or update if needed
     # ← END OF NEW PERMISSION-BASED URLs
     
     # Your existing URLs (EXISTING CODE)
