@@ -1,26 +1,27 @@
 from .models import Book, Author, Library, Librarian
 
-# 1. GitHub wants this EXACT pattern ↓
+# 1. For "Query all books by a specific author" task
 def books_by_author(author):
-    """Query all books by a specific author using objects.filter(author=author)"""
+    """Query all books by a specific author"""
     return Book.objects.filter(author=author)
 
-# 2. List all books in a library
-def books_in_library(library):
+# 2. For "List all books in a library" task  
+def books_in_library(library_name):
     """List all books in a specific library"""
-    return Book.objects.filter(library=library)
+    library = Library.objects.get(name=library_name)
+    return library.books.all()
 
-# 3. Retrieve the librarian for a library  
-def librarian_for_library(library):
+# 3. For "Retrieve the librarian for a library" task
+def librarian_for_library(library_name):
     """Retrieve the librarian for a specific library"""
-    return Librarian.objects.get(library=library)
+    library = Library.objects.get(name=library_name)
+    return library.librarian
 
-# 4. Alternative: Query by author name
+# 4. Alternative approaches (optional, for completeness)
 def books_by_author_name(author_name):
-    """Query all books by a specific author name"""
+    """Query books by author name"""
     return Book.objects.filter(author__name=author_name)
 
-# 5. Alternative: List books by library name
-def books_in_library_by_name(library_name):
-    """List all books in a library by library name"""
-    return Book.objects.filter(library__name=library_name)
+def books_in_library_filter(library):
+    """List books in library using filter approach"""
+    return Book.objects.filter(library=library)
