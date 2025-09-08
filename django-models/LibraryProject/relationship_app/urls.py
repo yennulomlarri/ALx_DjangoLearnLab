@@ -1,7 +1,7 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
-from .views import list_books, BookListView, LibraryDetailView, AuthorDetailView, member_view, librarian_view, admin_view  # ← ADDED NEW VIEWS
+from .views import list_books, BookListView, LibraryDetailView, AuthorDetailView, member_view, librarian_view, admin_view, add_book, edit_book, delete_book  # ← ADDED THE 3 NEW VIEWS
 
 urlpatterns = [
     # Authentication URLs (EXISTING CODE)
@@ -9,11 +9,16 @@ urlpatterns = [
     path('login/', LoginView.as_view(template_name="relationship_app/login.html"), name='login'),
     path('logout/', LogoutView.as_view(template_name="relationship_app/logout.html"), name='logout'),
     
-    # ← NEW ROLE-BASED URLs (ADD THIS SECTION)
+    # Role-based URLs (EXISTING CODE)
     path('member/', member_view, name='member_view'),
     path('librarian/', librarian_view, name='librarian_view'),
     path('admin/', admin_view, name='admin_view'),
-    # ← END OF NEW ROLE-BASED URLs
+    
+    # ← NEW PERMISSION-BASED URLs (ADDED THIS SECTION)
+    path('books/add/', add_book, name='add_book'),
+    path('books/<int:book_id>/edit/', edit_book, name='edit_book'),
+    path('books/<int:book_id>/delete/', delete_book, name='delete_book'),
+    # ← END OF NEW PERMISSION-BASED URLs
     
     # Your existing URLs (EXISTING CODE)
     path('books/', list_books, name='book_list'),

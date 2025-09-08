@@ -4,7 +4,7 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.decorators import user_passes_test  # ← NEW IMPORT
+from django.contrib.auth.decorators import user_passes_test, permission_required  # ← ADD permission_required if missing # ← NEW IMPORT
 from django.urls import reverse_lazy
 from .models import Book, Library, Author
 
@@ -76,3 +76,16 @@ def librarian_view(request):
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
 # ← END OF NEW ROLE-BASED VIEWS
+# ← NEW PERMISSION-BASED VIEWS (ADD THIS SECTION AT THE VERY BOTTOM)
+@permission_required('relationship_app.can_add_book', raise_exception=True)
+def add_book(request):
+    return render(request, 'relationship_app/add_book.html')
+
+@permission_required('relationship_app.can_change_book', raise_exception=True)
+def edit_book(request, book_id):
+    return render(request, 'relationship_app/edit_book.html')
+
+@permission_required('relationship_app.can_delete_book', raise_exception=True)
+def delete_book(request, book_id):
+    return render(request, 'relationship_app/delete_book.html')
+# ← END OF NEW PERMISSION-BASED VIEWS
