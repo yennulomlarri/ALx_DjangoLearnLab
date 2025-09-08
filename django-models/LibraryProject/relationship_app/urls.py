@@ -1,15 +1,21 @@
 from django.urls import path
 from django.contrib.auth.views import LoginView, LogoutView
 from . import views
-from .views import list_books, BookListView, LibraryDetailView, AuthorDetailView
+from .views import list_books, BookListView, LibraryDetailView, AuthorDetailView, member_view, librarian_view, admin_view  # ← ADDED NEW VIEWS
 
 urlpatterns = [
-    # Authentication URLs (EXACT patterns GitHub wants)
+    # Authentication URLs (EXISTING CODE)
     path('register/', views.register, name='register'),
     path('login/', LoginView.as_view(template_name="relationship_app/login.html"), name='login'),
     path('logout/', LogoutView.as_view(template_name="relationship_app/logout.html"), name='logout'),
     
-    # Your existing URLs
+    # ← NEW ROLE-BASED URLs (ADD THIS SECTION)
+    path('member/', member_view, name='member_view'),
+    path('librarian/', librarian_view, name='librarian_view'),
+    path('admin/', admin_view, name='admin_view'),
+    # ← END OF NEW ROLE-BASED URLs
+    
+    # Your existing URLs (EXISTING CODE)
     path('books/', list_books, name='book_list'),
     path('books-class/', BookListView.as_view(), name='book_list_class'),
     path('library/<int:pk>/', LibraryDetailView.as_view(), name='library_detail'),

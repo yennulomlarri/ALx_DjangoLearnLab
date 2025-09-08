@@ -4,12 +4,23 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
+from django.contrib.auth.decorators import user_passes_test  # ← NEW IMPORT
 from django.urls import reverse_lazy
 from .models import Book, Library, Author
 
-# Authentication views
+# ← NEW ROLE CHECKING FUNCTIONS (ADD THIS SECTION)
+def is_member(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'member'
+
+def is_librarian(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'librarian'
+
+def is_admin(user):
+    return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'admin'
+# ← END OF NEW ROLE CHECKING FUNCTIONS
+
+# Authentication views (EXISTING CODE)
 def register(request):
-    """User registration view"""
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
         if form.is_valid():
@@ -20,7 +31,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# Your existing views
+# Your existing views (EXISTING CODE)
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
@@ -51,3 +62,17 @@ class AuthorDetailView(DetailView):
         author = self.get_object()
         context['books'] = author.books.all()
         return context
+
+# ← NEW ROLE-BASED VIEWS (ADD THIS SECTION)
+@user_passes_test(is_member, login_url='/login/')
+def member_view(request):
+    return render(request, 'relationship_app/member_view.html')
+
+@user_passes_test(is_librarian, login_url='/login/')
+def librarian_view(request):
+    return render(request, 'relationship_app/librarian_view.html')
+
+@user_passes_test(is_admin, login_url='/login/')
+def admin_view(request):
+    return render(request, 'relationship_app/admin_view.html')
+# ← END OF NEW ROLE-BASED VIEWS
