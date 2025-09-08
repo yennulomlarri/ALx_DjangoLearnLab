@@ -4,11 +4,11 @@ from django.views.generic.detail import DetailView
 from django.contrib.auth import login, logout
 from django.contrib.auth.forms import UserCreationForm
 from django.contrib.auth.views import LoginView
-from django.contrib.auth.decorators import user_passes_test, permission_required  # ← ADD permission_required if missing # ← NEW IMPORT
+from django.contrib.auth.decorators import user_passes_test, permission_required  # ← UPDATED IMPORT
 from django.urls import reverse_lazy
 from .models import Book, Library, Author
 
-# ← NEW ROLE CHECKING FUNCTIONS (ADD THIS SECTION)
+# Role checking functions
 def is_member(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'member'
 
@@ -17,9 +17,8 @@ def is_librarian(user):
 
 def is_admin(user):
     return user.is_authenticated and hasattr(user, 'userprofile') and user.userprofile.role == 'admin'
-# ← END OF NEW ROLE CHECKING FUNCTIONS
 
-# Authentication views (EXISTING CODE)
+# Authentication views
 def register(request):
     if request.method == 'POST':
         form = UserCreationForm(request.POST)
@@ -31,7 +30,7 @@ def register(request):
         form = UserCreationForm()
     return render(request, 'relationship_app/register.html', {'form': form})
 
-# Your existing views (EXISTING CODE)
+# Your existing views
 def list_books(request):
     books = Book.objects.all()
     return render(request, 'relationship_app/list_books.html', {'books': books})
@@ -63,7 +62,7 @@ class AuthorDetailView(DetailView):
         context['books'] = author.books.all()
         return context
 
-# ← NEW ROLE-BASED VIEWS (ADD THIS SECTION)
+# Role-based views
 @user_passes_test(is_member, login_url='/login/')
 def member_view(request):
     return render(request, 'relationship_app/member_view.html')
@@ -75,8 +74,8 @@ def librarian_view(request):
 @user_passes_test(is_admin, login_url='/login/')
 def admin_view(request):
     return render(request, 'relationship_app/admin_view.html')
-# ← END OF NEW ROLE-BASED VIEWS
-# ← NEW PERMISSION-BASED VIEWS (ADD THIS SECTION AT THE VERY BOTTOM)
+
+# Permission-based views
 @permission_required('relationship_app.can_add_book', raise_exception=True)
 def add_book(request):
     return render(request, 'relationship_app/add_book.html')
@@ -88,4 +87,3 @@ def edit_book(request, book_id):
 @permission_required('relationship_app.can_delete_book', raise_exception=True)
 def delete_book(request, book_id):
     return render(request, 'relationship_app/delete_book.html')
-# ← END OF NEW PERMISSION-BASED VIEWS
